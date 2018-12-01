@@ -1,0 +1,530 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.database.AdminEntity" table="admin" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="login">
+            <column name="login" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="password">
+            <column name="password" sql-type="text" not-null="true"/>
+        </property>
+    </class>
+    <class name="com.database.AnalystEntity" table="analyst" schema="public" catalog="postgres">
+        <id name="idAnalyst">
+            <column name="id_analyst" sql-type="integer"/>
+        </id>
+        <property name="aboutMe">
+            <column name="about_me" sql-type="text" not-null="true"/>
+        </property>
+        <property name="purse">
+            <column name="purse" sql-type="bigint" not-null="true"/>
+        </property>
+    </class>
+    <class name="com.database.CastActorEntity" table="cast_actor" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.CastActorEntityPK">
+            <key-property name="idFilm">
+                <column name="id_film" sql-type="integer"/>
+            </key-property>
+            <key-property name="idActor">
+                <column name="id_actor" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="actorByIdActor" class="com.database.ActorEntity">
+            <column name="id_actor"/>
+        </many-to-one>
+    </class>
+
+    <class name="com.database.CustomersEntity" table="customers" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="text"/>
+        </property>
+        <property name="login">
+            <column name="login" sql-type="text"/>
+        </property>
+        <property name="profileImageUrl">
+            <column name="profile_image_url" sql-type="text" not-null="true"/>
+        </property>
+        <property name="emailHash">
+            <column name="email_hash" sql-type="text"/>
+        </property>
+        <property name="password">
+            <column name="password" sql-type="text"/>
+        </property>
+        <property name="mobNumber">
+            <column name="mob_number" sql-type="varchar(11)" length="11"/>
+        </property>
+        <property name="reputation">
+            <column name="reputation" sql-type="boolean"/>
+        </property>
+        <property name="lastAccess">
+            <column name="last_access" sql-type="date"/>
+        </property>
+        <property name="levelAccess">
+            <column name="level_access" sql-type="integer"/>
+        </property>
+        <property name="img">
+            <column name="img" sql-type="bytea" not-null="true"/>
+        </property>
+        <!--<one-to-one name="actorById" class="com.database.ActorEntity"/>-->
+        <!--<one-to-one name="analystById" class="com.database.AnalystEntity"/>-->
+    </class>
+    <class name="com.database.DialogueEntity" table="dialogue" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+    </class>
+    <class name="com.database.FilmEntity" table="film" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="text"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="date" not-null="true"/>
+        </property>
+        <property name="body">
+            <column name="body" sql-type="text" not-null="true"/>
+        </property>
+        <property name="img">
+            <column name="img" sql-type="bytea" not-null="true"/>
+        </property>
+        <property name="cashbox">
+            <column name="cashbox" sql-type="integer" not-null="true"/>
+        </property>
+    </class>
+    <class name="com.database.FilmTagEntity" table="film_tag" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.FilmTagEntityPK">
+            <key-property name="idTag">
+                <column name="id_tag" sql-type="integer"/>
+            </key-property>
+            <key-property name="idFilm">
+                <column name="id_film" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.FollowerActorEntity" table="follower_actor" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.FollowerActorEntityPK">
+            <key-property name="idCustomers">
+                <column name="id_customers" sql-type="integer"/>
+            </key-property>
+            <key-property name="idActor">
+                <column name="id_actor" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="customersByIdCustomers" class="com.database.CustomersEntity">
+            <column name="id_customers"/>
+        </many-to-one>
+        <many-to-one name="actorByIdActor" class="com.database.ActorEntity">
+            <column name="id_actor"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.FollowerAnalystEntity" table="follower_analyst" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.FollowerAnalystEntityPK">
+            <key-property name="idCustomers">
+                <column name="id_customers" sql-type="integer"/>
+            </key-property>
+            <key-property name="idAnalyst">
+                <column name="id_analyst" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="customersByIdCustomers" class="com.database.CustomersEntity">
+            <column name="id_customers"/>
+        </many-to-one>
+        <many-to-one name="analystByIdAnalyst" class="com.database.AnalystEntity">
+            <column name="id_analyst"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.FollowerStudioEntity" table="follower_studio" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.FollowerStudioEntityPK">
+            <key-property name="idCustomers">
+                <column name="id_customers" sql-type="integer"/>
+            </key-property>
+            <key-property name="idStudio">
+                <column name="id_studio" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="customersByIdCustomers" class="com.database.CustomersEntity">
+            <column name="id_customers"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.GalleryActorEntity" table="gallery_actor" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="photo">
+            <column name="photo" sql-type="bytea" not-null="true"/>
+        </property>
+        <many-to-one name="actorByIdActor" class="com.database.ActorEntity">
+            <column name="id_actor" not-null="true"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.GalleryFilmEntity" table="gallery_film" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="photo">
+            <column name="photo" sql-type="bytea" not-null="true"/>
+        </property>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film" not-null="true"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.GalleryStudioEntity" table="gallery_studio" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="photo">
+            <column name="photo" sql-type="bytea" not-null="true"/>
+        </property>
+    </class>
+    <class name="com.database.GenreEntity" table="genre" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="text"/>
+        </property>
+    </class>
+    <class name="com.database.GenreFilmEntity" table="genre_film" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.GenreFilmEntityPK">
+            <key-property name="idFilm">
+                <column name="id_film" sql-type="integer"/>
+            </key-property>
+            <key-property name="idGenre">
+                <column name="id_genre" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film"/>
+        </many-to-one>
+        <many-to-one name="genreByIdGenre" class="com.database.GenreEntity">
+            <column name="id_genre"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.MessageEntity" table="message" schema="public" catalog="postgres">
+        <id name="idAnalyst">
+            <column name="id_analyst" sql-type="integer"/>
+        </id>
+        <property name="body">
+            <column name="body" sql-type="text"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="date"/>
+        </property>
+        <one-to-one name="analystByIdAnalyst" class="com.database.AnalystEntity"/>
+    </class>
+    <class name="com.database.PostEntity" table="post" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="img">
+            <column name="img" sql-type="bytea" not-null="true"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="date" not-null="true"/>
+        </property>
+        <property name="body">
+            <column name="body" sql-type="text"/>
+        </property>
+        <many-to-one name="customersByUserUsOwnerId" class="com.database.CustomersEntity">
+            <column name="user_us_owner_id" not-null="true"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.PostTagEntity" table="post_tag" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.PostTagEntityPK">
+            <key-property name="idPost">
+                <column name="id_post" sql-type="integer"/>
+            </key-property>
+            <key-property name="idTag">
+                <column name="id_tag" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="postByIdPost" class="com.database.PostEntity">
+            <column name="id_post"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.RevTagEntity" table="rev_tag" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.RevTagEntityPK">
+            <key-property name="idTag">
+                <column name="id_tag" sql-type="integer"/>
+            </key-property>
+            <key-property name="idReview">
+                <column name="id_review" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+    </class>
+    <class name="com.database.ReviewEntity" table="review" schema="public" catalog="postgres">
+        <id name="idAnalyst">
+            <column name="id_analyst" sql-type="integer"/>
+        </id>
+        <property name="body">
+            <column name="body" sql-type="text" not-null="true"/>
+        </property>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film" not-null="true"/>
+        </many-to-one>
+        <one-to-one name="analystByIdAnalyst" class="com.database.AnalystEntity"/>
+    </class>
+    <class name="com.database.ScoreActorEntity" table="score_actor" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.ScoreActorEntityPK">
+            <key-property name="idUserUs">
+                <column name="id_user_us" sql-type="integer"/>
+            </key-property>
+            <key-property name="idActor">
+                <column name="id_actor" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <property name="score">
+            <column name="score" sql-type="real" precision="-1"/>
+        </property>
+        <many-to-one name="actorByIdActor" class="com.database.ActorEntity">
+            <column name="id_actor"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.ScoreAnalystEntity" table="score_analyst" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.ScoreAnalystEntityPK">
+            <key-property name="idUserUs">
+                <column name="id_user_us" sql-type="integer"/>
+            </key-property>
+            <key-property name="idAnalyst">
+                <column name="id_analyst" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <property name="score">
+            <column name="score" sql-type="real" precision="-1"/>
+        </property>
+        <many-to-one name="analystByIdAnalyst" class="com.database.AnalystEntity">
+            <column name="id_analyst"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.ScoreFilmEntity" table="score_film" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.ScoreFilmEntityPK">
+            <key-property name="idUserUs">
+                <column name="id_user_us" sql-type="integer"/>
+            </key-property>
+            <key-property name="idFilm">
+                <column name="id_film" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <property name="score">
+            <column name="score" sql-type="real" precision="-1"/>
+        </property>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.ScoreStudioEntity" table="score_studio" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.ScoreStudioEntityPK">
+            <key-property name="idUserUs">
+                <column name="id_user_us" sql-type="integer"/>
+            </key-property>
+            <key-property name="idStudio">
+                <column name="id_studio" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <property name="score">
+            <column name="score" sql-type="real" precision="-1"/>
+        </property>
+    </class>
+    <class name="com.database.ScriptEntity" table="script" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.ScriptEntityPK">
+            <key-property name="idFilm">
+                <column name="id_film" sql-type="integer"/>
+            </key-property>
+            <key-property name="idStudio">
+                <column name="id_studio" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.StudioEntity" table="studio" schema="public" catalog="postgres">
+        <id name="idStudio">
+            <column name="id_studio" sql-type="integer"/>
+        </id>
+        <property name="aboutMe">
+            <column name="about_me" sql-type="text" not-null="true"/>
+        </property>
+        <property name="purse">
+            <column name="purse" sql-type="bigint" not-null="true"/>
+        </property>
+        <property name="logoImg">
+            <column name="logo_img" sql-type="bytea" not-null="true"/>
+        </property>
+        <one-to-one name="customersByIdStudio" class="com.database.CustomersEntity"/>
+    </class>
+    <class name="com.database.SystemEntity" table="system" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="name">
+            <column name="name" sql-type="text"/>
+        </property>
+        <property name="body">
+            <column name="body" sql-type="text"/>
+        </property>
+        <property name="adminMail">
+            <column name="admin_mail" sql-type="text"/>
+        </property>
+    </class>
+    <class name="com.database.TagEntity" table="tag" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="tagName">
+            <column name="tag_name" sql-type="text"/>
+        </property>
+        <property name="count">
+            <column name="count" sql-type="integer"/>
+        </property>
+    </class>
+    <class name="com.database.TechSupportEntity" table="tech_support" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="login">
+            <column name="login" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="password">
+            <column name="password" sql-type="text" not-null="true"/>
+        </property>
+    </class>
+    <class name="com.database.TransactionEntity" table="transaction" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.TransactionEntityPK">
+            <key-property name="idSender">
+                <column name="id_sender" sql-type="integer"/>
+            </key-property>
+            <key-property name="idRecipient">
+                <column name="id_recipient" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <property name="sum">
+            <column name="sum" sql-type="bigint"/>
+        </property>
+        <!--<many-to-one name="studioByIdSender" class="com.database.StudioEntity">-->
+            <!--<column name="id_sender"/>-->
+        <!--</many-to-one>-->
+        <!--<many-to-one name="analystByIdRecipient" class="com.database.AnalystEntity">-->
+            <!--<column name="id_recipient"/>-->
+        <!--</many-to-one>-->
+    </class>
+    <class name="com.database.UserUsUsEntity" table="user_us_us" schema="public" catalog="postgres">
+        <id name="idUserUs">
+            <column name="id_user_us" sql-type="integer"/>
+        </id>
+        <one-to-one name="customersByIdUserUs" class="com.database.CustomersEntity"/>
+    </class>
+    <class name="com.database.VerificationEntity" table="verification" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.VerificationEntityPK">
+            <key-property name="idCustomers">
+                <column name="id_customers" sql-type="integer"/>
+            </key-property>
+            <key-property name="idStudio">
+                <column name="id_studio" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <!--<many-to-one name="customersByIdCustomers" class="com.database.CustomersEntity">-->
+            <!--<column name="id_customers"/>-->
+        <!--</many-to-one>-->
+        <!--<many-to-one name="studioByIdStudio" class="com.database.StudioEntity">-->
+            <!--<column name="id_studio"/>-->
+        <!--</many-to-one>-->
+    </class>
+    <class name="com.database.VotesEntity" table="votes" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="countPositive">
+            <column name="count_positive" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="countNegative">
+            <column name="count_negative" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="name">
+            <column name="name" sql-type="text" not-null="true"/>
+        </property>
+        <property name="flagAccess">
+            <column name="flag_access" sql-type="boolean" not-null="true"/>
+        </property>
+        <property name="votesImageUrl">
+            <column name="votes_image_url" sql-type="bytea" not-null="true"/>
+        </property>
+        <many-to-one name="filmByIdFilm" class="com.database.FilmEntity">
+            <column name="id_film" not-null="true"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.VotesTagEntity" table="votes_tag" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.VotesTagEntityPK">
+            <key-property name="idTag">
+                <column name="id_tag" sql-type="integer"/>
+            </key-property>
+            <key-property name="idVotes">
+                <column name="id_votes" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="tagByIdTag" class="com.database.TagEntity">
+            <column name="id_tag"/>
+        </many-to-one>
+        <many-to-one name="votesByIdVotes" class="com.database.VotesEntity">
+            <column name="id_votes"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.VotesUserEntity" table="votes_user" schema="public" catalog="postgres">
+        <composite-id mapped="true" class="com.database.VotesUserEntityPK">
+            <key-property name="idVotes">
+                <column name="id_votes" sql-type="integer"/>
+            </key-property>
+            <key-property name="idUser">
+                <column name="id_user" sql-type="integer"/>
+            </key-property>
+        </composite-id>
+        <many-to-one name="votesByIdVotes" class="com.database.VotesEntity">
+            <column name="id_votes"/>
+        </many-to-one>
+        <many-to-one name="userUsUsByIdUser" class="com.database.UserUsUsEntity">
+            <column name="id_user"/>
+        </many-to-one>
+    </class>
+    <class name="com.database.ChatEntity" table="chat" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="filmId">
+            <column name="film_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="msg">
+            <column name="msg" sql-type="text"/>
+        </property>
+        <property name="userUsId">
+            <column name="user_us_id" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="createDate">
+            <column name="create_date" sql-type="date"/>
+        </property>
+    </class>
+    <class name="com.database.ChatUserEntity" table="chat_user" schema="public" catalog="postgres">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="idUs">
+            <column name="id_us" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="idChat">
+            <column name="id_chat" sql-type="integer" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
